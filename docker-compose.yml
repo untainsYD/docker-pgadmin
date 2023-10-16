@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: docker-postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    networks:
+      - postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure[:3]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: docker-pgadmin
+    ports:
+      - "127.0.0.1:${PGADMIN_PORT:-5050}:80"
+    networks:
+      - postgres
+    volumes:
+       - pgadmin-data:/var/lib/pgadmin
+    restart: on-failure[:3]
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    logging:
+      driver: "none"
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  pgadmin-data:
+  postgres-data:
