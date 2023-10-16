@@ -11,11 +11,24 @@
 
 ## Environments
 This compose file contains the following environment variables.
-- `POSTGRES_USER` the default value is **postgres**.
-- `POSTGRES_PASSWORD` the default value is **changeme**.
-- `PGADMIN_PORT` the default value is **5050**.
-- `PGADMIN_DEFAULT_EMAIL` the default value is **pgadmin4@pgadmin.org**.
-- `PGADMIN_DEFAULT_PASSWORD` the default value is **admin**.
+- `LOOPBACK` bind the service to the loopback IP address, the default is exposed.
+- `POSTGRES_PORT` the default is `5432`.
+- `POSTGRES_USER` the default value is `postgres`.
+- `POSTGRES_PASSWORD` the default value is `changeme`.
+- `PGADMIN_PORT` the default value is `5050`.
+- `PGADMIN_DEFAULT_EMAIL` the default value is `pgadmin4@pgadmin.org`.
+- `PGADMIN_DEFAULT_PASSWORD` the default value is `admin`.
+
+You can create your own `.env` file within this folder.
+```env
+LOOPBACK=127.0.0.1
+POSTGRES_PORT=5435
+POSTGRES_USER=user1
+POSTGRES_PASSWORD=user12345
+PGADMIN_PORT=5050
+PGADMIN_DEFAULT_EMAIL=pgadmin@example.com
+PGADMIN_DEFAULT_PASSWORD=admin123
+```
 
 ## Access to PostgreSQL
 - `localhost:5432`.
@@ -43,3 +56,6 @@ logging:
 ```
 
 - *NOTES: see [reference](https://github.com/khezen/compose-postgres/pull/23/files) for more details.*
+
+## Server/Desktop mode
+This will run PGAdmin in `Desktop Mode`, meaning you wont need to log in to access the web interface: `PGADMIN_CONFIG_SERVER_MODE: 'False'`.

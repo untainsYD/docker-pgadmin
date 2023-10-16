@@ -5,7 +5,7 @@ services:
     image: postgres:latest
     container_name: docker-postgres
     ports:
-      - "127.0.0.1:5432:5432"
+      - "${LOOPBACK:-0.0.0.0}:${POSTGRES_PORT:-5432}:5432"
     networks:
       - postgres
     volumes:
@@ -14,13 +14,49 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      PGDATA: /var/lib/postgresql/data
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U <user> -d <db>"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 10s
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=512MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "idle_in_transaction_session_timeout=10s"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=60s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
 
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: docker-pgadmin
     ports:
-      - "127.0.0.1:${PGADMIN_PORT:-5050}:80"
+      - "${LOOPBACK:-0.0.0.0}:${PGADMIN_PORT:-5050}:80"
     networks:
       - postgres
     volumes:
