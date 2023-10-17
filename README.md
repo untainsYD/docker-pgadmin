@@ -1,12 +1,12 @@
-# PGAdmin & PostgreSQL powered by compose
+# PGAdmin & PostgreSQL powered by `docker-compose`
 
-## Requirements:
-- `docker >= 17.12.0+`
-- `docker-compose`
+## Requirements
+- `docker >= 17.12.0+`.
+- `docker-compose`.
 
 ## Start
 - Clone or download this repository.
-- Go inside of directory,  `cd compose-pgadmin`.
+- Go inside of the directory,  `cd compose-pgadmin`.
 - Run this command `docker-compose up -d`.
 
 ## Environments
